@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+<div class="container mt-5 bg-white"  style="padding:20px; border-radius:20px">
+    <div class="card mt-5">
+      <div class="card-header text-center py-3 text-bold">
+        <h1>URL Shortener</i></h1>
+      </div>
+      <div class="px-3 py-4">
+        <form method="POST">
+          {% csrf_token %}
+          <div class="row g-1">
+            <div class="col-10">{{form.long_url}}</div>
+            <div class="col-2 px-3">
+              <button class="btn btn-primary fw-bold btn-lg w-100 " type="submit">
+                Generate
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+    </div>
+    {% if errors %}
+    <div class="alert alert-danger mt-4" role="alert">
+      <p>{{errors}}</p>
+    </div>
+    {% endif %}
+  
+    {% if new_link %}
+  
+    <div class="mx-auto text-center mt-5">
+      <h2 class="text-success mb-4">Your new generated Url Details are given below</h2>
+    </div>
+    <table class="table table-bordered">
+    <thead class="bg-dark text-white">
+      <tr>
+        <th class="text-center" scope="col">Long Url Link</th>
+        <th class="text-center" scope="col">Short URL Code</th>
+        <th class="text-center" scope="col">Short URL Link</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td  scope="row">{{long_link}}</td>
+        <td scope="row">{{short_link}}</td>
+        <td scope="row" >
+          <a id="textToCopy" target="_blank" href="{{new_link}}"> {{new_link}}</a>
+        <button class='btn btn-primary btn-sm mx-3 fw-bold' id="copyButton" onclick="copyText()">Copy</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+    {% endif %}
+  </div>
+{% endblock content %}
+
+{% block copy %}
+<script>
+    function copyText()
+    {
+         /* Get the text content to be copied */
+        var textTocopy = document.getElementById("textToCopy")
+         /* Create a temporary textarea element */
+        var temptextare = document.createElement("textarea");
+        /* Set the value of the textarea to the text to be copied */
+        temptextare.value = textToCopy;
+        /* Append the textarea element to the document */
+        document.body.appendChild(temptextare);
+        /* Select the text within the textarea */
+        temptextare.select();
+        /* Copy the selected text to the clipboard */
+        document.execCommand("copy");
+         /* Remove the temporary textarea element */
+        document.body.removeChild(temptextare);
+
+        var copyButton = document.getElementById("copyButton");
+        copyButton.innerText = "copied!";
+        setTimeout(function()
+        {
+            copyButton.innerText = "Copy";
+
+        },2000); // Reset the button text after 2 seconds
+    }
+</script>
+
+
+{% endblock copy %}
